@@ -14,6 +14,7 @@
         <tr>
             <th>ID</th>
             <th>Titolo</th>
+            <th>Categoria</th>
             <th>Slug</th>
             <th>Azioni</th>
         </tr>
@@ -23,6 +24,7 @@
             <tr>
                 <td>{{$post->id}}</td>
                 <td>{{$post->title}}</td>
+                <td>{{$post->category->name}}</td>
                 <td>{{$post->slug}}</td>
                 <td>
                     <a class="btn btn-info" href="{{ route('admin.posts.show', $post->id) }}">Dettaglio</a>
