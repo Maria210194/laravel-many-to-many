@@ -75,8 +75,11 @@ class PostController extends Controller
         if(!$post){
             abort(404);
         }
-        $category = Category::find($post->category_id);
-        return view('admin.posts.show', compact('post', 'category'));
+        //$category = Category::find($post->category_id);
+        //return view('admin.posts.show', compact('post', 'category'));
+        //siccome Laravel è intelligente, potevo semplicemente passare il post:
+        return view('admin.posts.show', compact('post'));
+
     }
 
     /**
