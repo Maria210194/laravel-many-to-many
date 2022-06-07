@@ -35,7 +35,7 @@ class AddForeignPostsTable extends Migration
 
             $table->dropForeign('posts_category_id_foreign');
 
-            $tabl->dropColumn('category_id');
+            $table->dropColumn('category_id');
         });
     }
 }
