@@ -57,6 +57,22 @@
             <div class="d-block invalid-feedback">{{ $message }}</div>
         @enderror
     </div>
+
+
+    <div class="form-group">
+        <h3 for="content">Tags</h3>
+        @foreach ($tags as $tag)
+        <input type="checkbox" name="tags[]" value="{{$tag->id}}" class="form-check-input"
+        {{in_array($tag->id, old('tags', [])) ? 'checked' : ''}} />
+        <div class="form-check-label">{{$tag->name}}</div>
+
+        @endforeach
+        @error("tags[]")
+            <div class="d-block invalid-feedback">{{ $message }}</div>
+        @enderror
+    </div>
+
+
     <div class="form-group">
         <button type="submit" class="btn btn-success">Crea post</button>
     </div>

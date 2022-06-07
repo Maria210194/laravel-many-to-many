@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\Post;
 use App\Category;
+use App\Tag;
 
 class PostController extends Controller
 {
@@ -27,7 +28,8 @@ class PostController extends Controller
     {
         //
         $categories = Category::all();
-        return view('admin.posts.create' , compact('categories'));
+        $tags= Tag::all();
+        return view('admin.posts.create' , compact('categories', 'tags'));
     }
 
     /**
@@ -42,13 +44,15 @@ class PostController extends Controller
         $request->validate([
             'title'=>'required|max:250',
             'content'=>'required|min:5',
-            'category_id'=>'required|exists:categories,id'
+            'category_id'=>'required|exists:categories,id',
+            'tags'=>'exists:tags,id'
             ],
             [
                 'title.required'=>'Il titolo dev\'essere valorizzato',
                 'title.max'=>'Hai superato i 250 caratteri',
                 'content.min'=>':attribute deve avere almeno :min caratteri',
-                'category_id.exists'=> 'La categoria selezionata non esiste'
+                'category_id.exists'=> 'La categoria selezionata non esiste',
+                'tags'=>'Il Tag non esiste'
             ]);
 
             $postData = $request->all();
@@ -57,6 +61,11 @@ class PostController extends Controller
             $newPost->fill($postData);
 
             $newPost->slug = Post::convertToSlug($newPost->title);
+            $newPost->save();
+
+            if(array_key_exists('tags', $postData)){
+                $newPost->tags()->sync($postData['tags']);
+            }
 
             $newPost->save();
             return redirect()->route('admin.posts.index');
