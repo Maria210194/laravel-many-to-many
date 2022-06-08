@@ -67,7 +67,7 @@
         <div class="form-check-label">{{$tag->name}}</div>
 
         @endforeach
-        @error("tags[]")
+        @error("tags")
             <div class="d-block invalid-feedback">{{ $message }}</div>
         @enderror
     </div>

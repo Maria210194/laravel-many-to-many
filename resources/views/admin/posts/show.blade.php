@@ -19,6 +19,12 @@
     <dd>{{$post->category->name}}</dd>
     <dt>Contenuto</dt>
     <dd>{{$post->content}}</dd>
+    <dt>Tags</dt>
+    <dd>
+        @foreach ($post->tags as $tag)
+            <span>{{$tag->name}}</span>
+        @endforeach
+    </dd>
 </dl>
     <a class="btn btn-warning" href="{{ route("admin.posts.edit", $post->id) }}">Modifica</a>
     <form class="d-inline-block" action="{{route('admin.posts.destroy' ,  $post->id)}}" method="POST">

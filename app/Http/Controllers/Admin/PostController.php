@@ -105,8 +105,9 @@ class PostController extends Controller
         }
 
         $categories = Category::all();
+        $tags = Tag::all();
 
-        return view('admin.posts.edit', compact('post','categories'));
+        return view('admin.posts.edit', compact('post','categories', 'tags'));
 
     }
 
@@ -122,14 +123,16 @@ class PostController extends Controller
         //
         $request->validate([
             'title'=> 'required|max:250',
-            'content'=> 'required',
-            'category_id'=>'required|exists:categories,id'
+            'content'=> 'required|min:5',
+            'category_id'=>'required|exists:categories,id',
+            'tags'=>'exists:tags,id'
         ],
         [
             'title.required'=>'Il titolo dev\'essere valorizzato',
             'title.max'=>'Hai superato i 250 caratteri',
             'content.min'=>':attribute deve avere almeno :min caratteri',
-            'category_id.exists'=> 'La categoria selezionata non esiste'
+            'category_id.exists'=> 'La categoria selezionata non esiste',
+            'tags'=>'Il Tag non esiste'
         ]);
 
 
@@ -137,8 +140,13 @@ class PostController extends Controller
         $post->fill($postData);
         $post->slug= Post::convertToSlug($post->title);
 
-        $post->update();
+        if(array_key_exists('tags', $postData)){
+            $post->tags()->sync($postData['tags']);
+        }else{
+            $post->tags()->sync([]);
+        }
 
+        $post->update();
         return redirect()->route('admin.posts.index', $post->id);
     }
 
@@ -152,6 +160,7 @@ class PostController extends Controller
     {
         //
         if($post){
+            $post->tags()->sync([]);
             $post->delete();
         }
         //$post = Post::findOrFail($id);
